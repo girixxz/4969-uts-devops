@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:18'
+        }
+    }
 
     environment {
         DEPLOY_USER = "ec2-user"
@@ -58,7 +62,7 @@ pipeline {
         }
         failure {
             echo "Pipeline failed."
-            mail to: 'your-email@example.com',
+            mail to: 'adityagiri206@example.com',
                  subject: "Build failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                  body: "Check Jenkins for details."
         }
