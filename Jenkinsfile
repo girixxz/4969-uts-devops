@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs "nodejs-18"  // nama yang kamu kasih waktu konfigurasi
+        nodejs "Node18"  // nama yang kamu kasih waktu konfigurasi
     }
 
 
