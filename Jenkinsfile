@@ -1,9 +1,10 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:18'
-        }
+    agent any
+
+    tools {
+        nodejs "nodejs-18"  // nama yang kamu kasih waktu konfigurasi
     }
+
 
     environment {
         DEPLOY_USER = "ec2-user"
@@ -33,7 +34,9 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo "Build step skipped (optional)"
+                sh 'node -v'
+                sh 'npm install'
+                sh 'npm run build'
             }
         }
 
@@ -59,12 +62,6 @@ pipeline {
     post {
         success {
             echo "Pipeline finished successfully."
-        }
-        failure {
-            echo "Pipeline failed."
-            mail to: 'adityagiri206@example.com',
-                 subject: "Build failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "Check Jenkins for details."
         }
     }
 }
