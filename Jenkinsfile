@@ -62,7 +62,7 @@ pipeline {
                         fi
 
                         pm2 restart app.js || pm2 start app.js
-                EOF
+                    EOF
                     """
                 }
             }
