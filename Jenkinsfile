@@ -47,7 +47,7 @@ pipeline {
             steps {
                 sshagent([SSH_CREDENTIALS_ID]) {
                     sh """
-                    ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_HOST} << 'EOF'
+                    ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_HOST} << EOF
                     if [ ! -d "${APP_DIR}" ]; then
                     cd /home/ec2-user
                     git clone https://github.com/girixxz/4969-uts-devops.git
