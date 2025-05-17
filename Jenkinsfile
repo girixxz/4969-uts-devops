@@ -48,20 +48,20 @@ pipeline {
                 sshagent([SSH_CREDENTIALS_ID]) {
                     sh """
                     ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_HOST} << EOF
-                    if [ ! -d "${APP_DIR}" ]; then
-                    cd /home/ec2-user
-                    git clone https://github.com/girixxz/4969-uts-devops.git
-                    fi
+                        if [ ! -d "${APP_DIR}" ]; then
+                        cd /home/ec2-user
+                        git clone https://github.com/girixxz/4969-uts-devops.git
+                        fi
 
-                    cd ${APP_DIR}
-                    git pull origin development
-                    npm install
+                        cd ${APP_DIR}
+                        git pull origin development
+                        npm install
 
-                    if ! command -v pm2 &> /dev/null; then
-                    sudo npm install -g pm2
-                    fi
+                        if ! command -v pm2 &> /dev/null; then
+                        sudo npm install -g pm2
+                        fi
 
-                    pm2 restart app.js || pm2 start app.js
+                        pm2 restart app.js || pm2 start app.js
                     EOF
                     """
                 }
