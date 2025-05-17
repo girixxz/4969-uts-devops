@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uts-devops-deployment
+  labels:
+    app: uts-devops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: uts-devops
+  template:
+    metadata:
+      labels:
+        app: uts-devops
+    spec:
+      containers:
+        - name: uts-devops-container
+          image: girixxz/uts-devops-app:latest # Ganti dengan nama image kamu kalau belum di-push
+          ports:
+            - containerPort: 3000
