@@ -2,13 +2,12 @@ pipeline {
     agent any
 
     tools {
-        nodejs "Node18"  // nama yang kamu kasih waktu konfigurasi
+        nodejs "Node18"  // sesuaikan dengan nama NodeJS tool di Jenkins
     }
-
 
     environment {
         DEPLOY_USER = "ec2-user"
-        DEPLOY_HOST = "54.254.95.54"  // Ganti dengan IP instance AWS dari output terraform
+        DEPLOY_HOST = "54.254.95.54"  // Ganti dengan IP instance AWS-mu
         SSH_CREDENTIALS_ID = "girixxz_ssh"  // ID credential SSH di Jenkins
         APP_DIR = "/home/ec2-user/4969-uts-devops"
     }
@@ -28,6 +27,7 @@ pipeline {
 
         stage('Run Tests') {
             steps {
+                // Kalau tidak ada test, ini supaya pipeline tetap lanjut
                 sh 'npm test || echo "No tests defined"'
             }
         }
@@ -47,22 +47,22 @@ pipeline {
             steps {
                 sshagent([SSH_CREDENTIALS_ID]) {
                     sh """
-                    ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_HOST} << EOF
-                        if [ ! -d "${APP_DIR}" ]; then
+                    ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_HOST} << ENDSSH
+                    if [ ! -d "${APP_DIR}" ]; then
                         cd /home/ec2-user
                         git clone https://github.com/girixxz/4969-uts-devops.git
-                        fi
+                    fi
 
-                        cd ${APP_DIR}
-                        git pull origin development
-                        npm install
+                    cd ${APP_DIR}
+                    git pull origin development
+                    npm install
 
-                        if ! command -v pm2 &> /dev/null; then
+                    if ! command -v pm2 &> /dev/null; then
                         sudo npm install -g pm2
-                        fi
+                    fi
 
-                        pm2 restart app.js || pm2 start app.js
-                    EOF
+                    pm2 restart app.js || pm2 start app.js
+ENDSSH
                     """
                 }
             }
@@ -72,6 +72,9 @@ pipeline {
     post {
         success {
             echo "Pipeline finished successfully."
+        }
+        failure {
+            echo "Pipeline failed. Check the logs."
         }
     }
 }
