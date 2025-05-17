@@ -9,7 +9,7 @@ pipeline {
     environment {
         DEPLOY_USER = "ec2-user"
         DEPLOY_HOST = "54.254.95.54"  // Ganti dengan IP instance AWS dari output terraform
-        SSH_CREDENTIALS_ID = "girixxz"  // ID credential SSH di Jenkins
+        SSH_CREDENTIALS_ID = "girixxz_ssh"  // ID credential SSH di Jenkins
         APP_DIR = "/home/ec2-user/app"
     }
 
